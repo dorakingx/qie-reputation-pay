@@ -65,14 +65,28 @@ export const reputationPayAbi = [
     type: "function",
   },
   {
+    inputs: [{ name: "requestId", type: "uint256" }],
+    name: "refundRequest",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [
       { name: "requestId", type: "uint256" },
       { name: "rating", type: "uint8" },
-      { name: "reviewText", type: "string" },
+      { name: "reviewHash", type: "bytes32" },
     ],
     name: "leaveReview",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ name: "requestId", type: "uint256" }],
+    name: "getEscrowBalance",
+    outputs: [{ name: "", type: "uint256" }],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -90,6 +104,7 @@ export const reputationPayAbi = [
           { name: "description", type: "string" },
           { name: "paid", type: "bool" },
           { name: "completed", type: "bool" },
+          { name: "refunded", type: "bool" },
           { name: "createdAt", type: "uint256" },
         ],
         name: "",
@@ -118,33 +133,18 @@ export const reputationPayAbi = [
     type: "function",
   },
   {
-    inputs: [{ name: "requestId", type: "uint256" }],
-    name: "getReview",
-    outputs: [
-      {
-        components: [
-          { name: "requestId", type: "uint256" },
-          { name: "reviewer", type: "address" },
-          { name: "reviewee", type: "address" },
-          { name: "rating", type: "uint8" },
-          { name: "reviewText", type: "string" },
-          { name: "createdAt", type: "uint256" },
-        ],
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [],
-    name: "nextRequestId",
+    name: "refundDelay",
     outputs: [{ name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
 ] as const;
+
+export function getExpectedChainId(): number {
+  const id = process.env.NEXT_PUBLIC_CHAIN_ID;
+  return id ? Number(id) : 1983;
+}
 
 export function getContractAddresses(chainId: number) {
   const mock =
@@ -152,12 +152,16 @@ export function getContractAddresses(chainId: number) {
   const rep =
     process.env.NEXT_PUBLIC_REPUTATION_PAY_ADDRESS as `0x${string}` | undefined;
 
-  // Try deployed.ts if env not set
   if (mock && rep) {
-    return { mockQIEUSD: mock, reputationPay: rep, isConfigured: true };
+    return { mockQIEUSD: mock, reputationPay: rep, isConfigured: true, chainId };
   }
 
-  return { mockQIEUSD: undefined, reputationPay: undefined, isConfigured: false };
+  return {
+    mockQIEUSD: undefined,
+    reputationPay: undefined,
+    isConfigured: false,
+    chainId,
+  };
 }
 
 export function areContractsConfigured(): boolean {

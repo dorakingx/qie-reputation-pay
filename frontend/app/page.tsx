@@ -4,16 +4,14 @@ import {
   Shield,
   Star,
   Wallet,
-  Zap,
-  Users,
-  Store,
-  Palette,
+  BadgeCheck,
+  Lock,
+  TrendingUp,
 } from "lucide-react";
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen">
-      {/* Hero */}
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-2">
@@ -31,19 +29,15 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <section className="mx-auto max-w-6xl px-4 py-20 text-center">
+      <section className="mx-auto max-w-6xl px-4 py-16 text-center md:py-24">
         <p className="mb-4 inline-block rounded-full bg-teal-50 px-4 py-1 text-sm font-medium text-teal-700">
-          QIE Ecosystem · Hackathon MVP
+          QIE Ecosystem · Hackathon 2026
         </p>
-        <h1 className="mb-4 text-4xl font-bold tracking-tight text-slate-900 md:text-6xl">
-          QIE Reputation Pay
+        <h1 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 md:text-5xl">
+          Escrow-backed stablecoin payments + portable QIE reputation for freelancers and merchants.
         </h1>
-        <p className="mb-2 text-xl text-teal-600 md:text-2xl">
-          Stablecoin payments with identity-based reputation.
-        </p>
         <p className="mx-auto mb-8 max-w-2xl text-lg text-slate-600">
-          Accept payments, build trust, and unlock reputation-based opportunities
-          in the QIE ecosystem.
+          Pay safely with QIEUSD held in escrow until work is done. Build verifiable trust that travels with your wallet across the QIE ecosystem.
         </p>
         <Link
           href="/app/dashboard"
@@ -54,106 +48,115 @@ export default function LandingPage() {
         </Link>
       </section>
 
-      {/* How it works */}
-      <section className="border-t border-slate-200 bg-white py-16">
+      <section className="border-t border-slate-200 bg-white py-14">
+        <div className="mx-auto grid max-w-6xl gap-6 px-4 md:grid-cols-3">
+          {[
+            {
+              icon: Lock,
+              title: "Pay safely with QIEUSD",
+              desc: "Funds stay in smart-contract escrow until the recipient marks work complete.",
+            },
+            {
+              icon: Star,
+              title: "Build trust with verified reviews",
+              desc: "On-chain ratings and review hashes plus QIE Pass identity reduce Sybil farming.",
+            },
+            {
+              icon: TrendingUp,
+              title: "Unlock reputation-based opportunities",
+              desc: "Portable trust scores help freelancers and merchants win better clients.",
+            },
+          ].map((card) => (
+            <div
+              key={card.title}
+              className="rounded-xl border border-slate-200 p-6 shadow-sm"
+            >
+              <card.icon className="mb-3 h-8 w-8 text-teal-600" />
+              <h3 className="font-semibold text-slate-900">{card.title}</h3>
+              <p className="mt-2 text-sm text-slate-600">{card.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="py-14">
+        <div className="mx-auto max-w-3xl px-4 text-center">
+          <h2 className="mb-4 text-2xl font-bold">Why this matters</h2>
+          <p className="text-slate-600">
+            Web3 payments are easy — but Web3 trust is still fragmented. Freelancers and merchants
+            repeat KYC and reputation building on every platform. QIE Reputation Pay combines
+            escrow-backed QIEUSD payments with wallet-native reputation so trust is portable,
+            verifiable, and composable across the QIE ecosystem.
+          </p>
+        </div>
+      </section>
+
+      <section className="border-t border-slate-200 bg-white py-14">
         <div className="mx-auto max-w-6xl px-4">
-          <h2 className="mb-10 text-center text-3xl font-bold">How it works</h2>
-          <div className="grid gap-6 md:grid-cols-4">
+          <h2 className="mb-8 text-center text-2xl font-bold">Built for QIE</h2>
+          <div className="overflow-hidden rounded-xl border border-slate-200">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-slate-50">
+                <tr>
+                  <th className="px-4 py-3 font-medium">Integration</th>
+                  <th className="px-4 py-3 font-medium">Status</th>
+                  <th className="px-4 py-3 font-medium">Role</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {[
+                  ["QIE Wallet", "Active", "Login and escrow payment authorization"],
+                  ["QIE Testnet", "Active", "Chain ID 1983 — live deployment ready"],
+                  ["MockQIEUSD / QUSDC", "Active (demo)", "Escrow-backed stable payments"],
+                  ["QIE Pass", "Demo verification", "Sybil-resistant identity layer"],
+                  ["QIE DEX", "Future", "Auto-convert received payments"],
+                  ["QIE Oracle", "Future", "Risk scoring and credit limits"],
+                ].map(([name, status, role]) => (
+                  <tr key={name}>
+                    <td className="px-4 py-3 font-medium">{name}</td>
+                    <td className="px-4 py-3">
+                      <span
+                        className={
+                          status.includes("Active")
+                            ? "text-emerald-600"
+                            : status.includes("Demo")
+                              ? "text-blue-600"
+                              : "text-slate-500"
+                        }
+                      >
+                        {status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-slate-600">{role}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-14">
+        <div className="mx-auto max-w-6xl px-4">
+          <h2 className="mb-8 text-center text-2xl font-bold">How escrow works</h2>
+          <div className="grid gap-4 md:grid-cols-4">
             {[
-              { step: "1", title: "Connect Wallet", desc: "Use your QIE-compatible wallet as identity", icon: Wallet },
-              { step: "2", title: "Create Request", desc: "Send a stablecoin payment invoice", icon: Zap },
-              { step: "3", title: "Pay & Complete", desc: "Pay with QIEUSD and mark work done", icon: Shield },
-              { step: "4", title: "Build Reputation", desc: "Earn reviews and a portable trust score", icon: Star },
+              { step: "1", title: "Connect", desc: "QIE-compatible wallet", icon: Wallet },
+              { step: "2", title: "Create", desc: "Payment request invoice", icon: Shield },
+              { step: "3", title: "Escrow", desc: "Payer deposits QIEUSD", icon: Lock },
+              { step: "4", title: "Reputation", desc: "Release + review on-chain", icon: BadgeCheck },
             ].map((item) => (
               <div
                 key={item.step}
-                className="rounded-xl border border-slate-200 p-6 text-center shadow-sm"
+                className="rounded-xl border border-slate-200 bg-white p-5 text-center shadow-sm"
               >
-                <item.icon className="mx-auto mb-3 h-8 w-8 text-teal-600" />
-                <span className="text-xs font-bold text-teal-600">
-                  STEP {item.step}
-                </span>
+                <item.icon className="mx-auto mb-2 h-7 w-7 text-teal-600" />
+                <span className="text-xs font-bold text-teal-600">STEP {item.step}</span>
                 <h3 className="mt-1 font-semibold">{item.title}</h3>
-                <p className="mt-2 text-sm text-slate-600">{item.desc}</p>
+                <p className="mt-1 text-xs text-slate-600">{item.desc}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Why */}
-      <section className="py-16">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="mb-10 text-center text-3xl font-bold">
-            Why QIE Reputation Pay
-          </h2>
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              {
-                title: "Portable Trust",
-                desc: "Reputation follows your wallet across the QIE ecosystem.",
-              },
-              {
-                title: "Stable Payments",
-                desc: "Pay and receive in QIEUSD without volatility risk.",
-              },
-              {
-                title: "On-Chain Proof",
-                desc: "Completed work and reviews are verifiable on-chain.",
-              },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
-              >
-                <h3 className="font-semibold text-teal-700">{item.title}</h3>
-                <p className="mt-2 text-sm text-slate-600">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Use cases */}
-      <section className="border-t border-slate-200 bg-white py-16">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="mb-10 text-center text-3xl font-bold">Use cases</h2>
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              { icon: Palette, title: "Freelancers", desc: "Designers, developers, and consultants" },
-              { icon: Users, title: "Creators", desc: "Artists, researchers, and content creators" },
-              { icon: Store, title: "Small Merchants", desc: "Online shops and service providers" },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="flex gap-4 rounded-xl border border-slate-200 p-6"
-              >
-                <item.icon className="h-10 w-10 shrink-0 text-teal-600" />
-                <div>
-                  <h3 className="font-semibold">{item.title}</h3>
-                  <p className="text-sm text-slate-600">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* QIE ecosystem */}
-      <section className="py-16">
-        <div className="mx-auto max-w-6xl px-4 text-center">
-          <h2 className="mb-4 text-3xl font-bold">QIE Ecosystem Integration</h2>
-          <p className="mx-auto mb-8 max-w-2xl text-slate-600">
-            QIE Reputation Pay is a trust layer for stablecoin payments — helping
-            freelancers, creators, and merchants build portable reputation.
-          </p>
-          <Link
-            href="/app/about"
-            className="inline-flex items-center gap-2 text-teal-600 font-medium hover:underline"
-          >
-            Learn more about QIE integration
-            <ArrowRight className="h-4 w-4" />
-          </Link>
         </div>
       </section>
 

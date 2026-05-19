@@ -1,4 +1,4 @@
-export type PaymentStatus = "Pending" | "Paid" | "Completed";
+export type PaymentStatus = "Pending" | "Escrowed" | "Completed" | "Refunded";
 
 export type PaymentCategory =
   | "Freelance Work"
@@ -24,6 +24,7 @@ export interface UserProfile {
   totalReceived: number;
   reputationScore: number;
   trustLevel: TrustLevel;
+  qiePassVerified: boolean;
 }
 
 export interface PaymentRequest {
@@ -39,6 +40,7 @@ export interface PaymentRequest {
   category: PaymentCategory;
   status: PaymentStatus;
   createdAt: string;
+  escrowAmount?: number;
 }
 
 export interface Review {
@@ -48,5 +50,6 @@ export interface Review {
   reviewee: string;
   rating: number;
   text: string;
+  reviewHash?: string;
   createdAt: string;
 }

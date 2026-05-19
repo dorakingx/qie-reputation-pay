@@ -18,9 +18,9 @@ const integrations = [
   {
     icon: Shield,
     title: "QIE Pass",
-    status: "Planned",
+    status: "Demo verification",
     description:
-      "Planned integration for identity verification and Sybil resistance. Will strengthen trust scores with verified credentials.",
+      "Demo mock verification on profile pages. QIE Pass prevents Sybil attacks and duplicate reputation farming by tying verified identity to wallet reputation.",
   },
   {
     icon: Coins,

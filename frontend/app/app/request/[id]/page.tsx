@@ -4,6 +4,7 @@ import { use, useState } from "react";
 import { useAccount } from "wagmi";
 import Link from "next/link";
 import { StatusBadge } from "@/components/StatusBadge";
+import { EscrowBadge } from "@/components/EscrowBadge";
 import {
   getRequestById,
   demoPaymentRequests,
@@ -14,6 +15,8 @@ import {
   usePayRequest,
   useMarkCompleted,
   useLeaveReview,
+  useRefundRequest,
+  useEscrowBalance,
 } from "@/hooks/useReputationPay";
 import { areContractsConfigured } from "@/lib/contracts";
 import { truncateAddress, formatAmount, copyToClipboard } from "@/lib/utils";
@@ -21,6 +24,7 @@ import { toast } from "sonner";
 import { Copy } from "lucide-react";
 import { ExplorerLink } from "@/components/ExplorerLink";
 import type { PaymentRequest } from "@/types";
+import { formatUnits } from "viem";
 
 export default function RequestDetailPage({
   params,
@@ -30,9 +34,11 @@ export default function RequestDetailPage({
   const { id } = use(params);
   const { address, isConnected } = useAccount();
   const { data: onChainData, refetch } = usePaymentRequestOnChain(id);
+  const { balance: escrowBalance } = useEscrowBalance(id);
   const { pay, isPending: isPaying, hash: payHash } = usePayRequest();
   const { markCompleted, isPending: isCompleting, hash: completeHash } =
     useMarkCompleted();
+  const { refund, isPending: isRefunding, hash: refundHash } = useRefundRequest();
   const { leaveReview, isPending: isReviewing, hash: reviewHash } =
     useLeaveReview();
 
@@ -50,7 +56,7 @@ export default function RequestDetailPage({
 
   if (!request) {
     return (
-      <div className="text-center py-12">
+      <div className="py-12 text-center">
         <p className="text-slate-600">Payment request not found.</p>
         <Link href="/app/dashboard" className="mt-4 text-teal-600 hover:underline">
           Back to dashboard
@@ -64,24 +70,36 @@ export default function RequestDetailPage({
   const isPayer =
     address?.toLowerCase() === request.payer?.toLowerCase();
   const canPay = request.status === "Pending" && isConnected && !isRecipient;
-  const canComplete = request.status === "Paid" && isRecipient;
+  const canComplete = request.status === "Escrowed" && isRecipient;
   const canReview = request.status === "Completed" && isPayer;
+  const canRefund =
+    request.status === "Escrowed" && isPayer && areContractsConfigured();
+
+  const escrowDisplay =
+    escrowBalance !== undefined
+      ? Number(formatUnits(escrowBalance as bigint, 18))
+      : request.escrowAmount ?? request.amount;
 
   const handlePay = async () => {
     try {
       if (areContractsConfigured()) {
         await pay(id, String(request.amount));
-        toast.success("Payment successful!");
+        toast.success("Funds deposited into escrow!");
         refetch();
       } else {
-        const updated = { ...request, status: "Paid" as const, payer: address };
+        const updated: PaymentRequest = {
+          ...request,
+          status: "Escrowed",
+          payer: address,
+          escrowAmount: request.amount,
+        };
         setLocalRequest(updated);
         const idx = demoPaymentRequests.findIndex((r) => r.id === id);
         if (idx >= 0) demoPaymentRequests[idx] = updated;
-        toast.success("Payment marked as paid (demo mode)");
+        toast.success("Payment escrowed (demo mode)");
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Payment failed");
+      toast.error(err instanceof Error ? err.message : "Escrow deposit failed");
     }
   };
 
@@ -89,17 +107,31 @@ export default function RequestDetailPage({
     try {
       if (areContractsConfigured()) {
         await markCompleted(id);
-        toast.success("Marked as completed!");
+        toast.success("Escrow released to recipient!");
         refetch();
       } else {
         const updated = { ...request, status: "Completed" as const };
         setLocalRequest(updated);
         const idx = demoPaymentRequests.findIndex((r) => r.id === id);
         if (idx >= 0) demoPaymentRequests[idx] = updated;
-        toast.success("Work marked complete (demo mode)");
+        toast.success("Escrow released (demo mode)");
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed");
+    }
+  };
+
+  const handleRefund = async () => {
+    try {
+      await refund(id);
+      toast.success("Escrow refunded to payer");
+      refetch();
+    } catch (err) {
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : "Refund failed — wait for refund delay on local/testnet"
+      );
     }
   };
 
@@ -111,7 +143,7 @@ export default function RequestDetailPage({
     try {
       if (areContractsConfigured()) {
         await leaveReview(id, rating, reviewText);
-        toast.success("Review submitted on-chain!");
+        toast.success("Review hash stored on-chain!");
         refetch();
       } else {
         toast.success("Review submitted (demo mode)");
@@ -136,12 +168,18 @@ export default function RequestDetailPage({
       </Link>
 
       <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="mb-4 flex items-start justify-between">
+        <div className="mb-4 flex flex-wrap items-start justify-between gap-2">
           <div>
             <p className="text-sm text-slate-500">Request #{request.id}</p>
             <h1 className="text-2xl font-bold">{request.title}</h1>
+            <p className="mt-1 text-sm text-slate-500">
+              Escrow-backed stablecoin payment
+            </p>
           </div>
-          <StatusBadge status={request.status} />
+          <div className="flex flex-col items-end gap-2">
+            <StatusBadge status={request.status} />
+            <EscrowBadge status={request.status} />
+          </div>
         </div>
 
         <p className="mb-6 text-slate-600">{request.description}</p>
@@ -153,6 +191,14 @@ export default function RequestDetailPage({
               {formatAmount(request.amount, request.tokenSymbol)}
             </span>
           </div>
+          {request.status === "Escrowed" && (
+            <div className="flex justify-between">
+              <span className="text-slate-500">In escrow</span>
+              <span className="font-semibold text-blue-700">
+                {formatAmount(escrowDisplay, request.tokenSymbol)}
+              </span>
+            </div>
+          )}
           <div className="flex justify-between">
             <span className="text-slate-500">Recipient</span>
             <span className="font-mono">{truncateAddress(request.recipient)}</span>
@@ -180,7 +226,7 @@ export default function RequestDetailPage({
               disabled={isPaying}
               className="rounded-lg bg-teal-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-teal-700 disabled:opacity-50"
             >
-              {isPaying ? "Processing..." : "Pay with QIEUSD"}
+              {isPaying ? "Depositing..." : "Pay into Escrow (QIEUSD)"}
             </button>
           )}
           {canComplete && (
@@ -189,7 +235,16 @@ export default function RequestDetailPage({
               disabled={isCompleting}
               className="rounded-lg bg-emerald-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
             >
-              {isCompleting ? "Processing..." : "Mark as Completed"}
+              {isCompleting ? "Releasing..." : "Release Escrow & Complete"}
+            </button>
+          )}
+          {canRefund && (
+            <button
+              onClick={handleRefund}
+              disabled={isRefunding}
+              className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium hover:bg-slate-50 disabled:opacity-50"
+            >
+              {isRefunding ? "Refunding..." : "Refund Escrow"}
             </button>
           )}
           <button
@@ -202,14 +257,18 @@ export default function RequestDetailPage({
         </div>
 
         <div className="mt-4 flex flex-wrap gap-4">
-          <ExplorerLink hash={payHash} label="Payment tx" />
-          <ExplorerLink hash={completeHash} label="Completion tx" />
+          <ExplorerLink hash={payHash} label="Escrow tx" />
+          <ExplorerLink hash={completeHash} label="Release tx" />
+          <ExplorerLink hash={refundHash} label="Refund tx" />
           <ExplorerLink hash={reviewHash} label="Review tx" />
         </div>
 
         {canReview && (
           <div className="mt-8 border-t border-slate-200 pt-6">
             <h2 className="mb-4 font-semibold">Leave a Review</h2>
+            <p className="mb-3 text-xs text-slate-500">
+              Rating is stored on-chain; full text is hashed for integrity (off-chain in Supabase when configured).
+            </p>
             <div className="mb-3">
               <label className="mb-1 block text-sm font-medium">Rating (1-5)</label>
               <select

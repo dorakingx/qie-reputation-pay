@@ -72,3 +72,17 @@ export async function fetchMetadata(
     .maybeSingle();
   return data;
 }
+
+export async function saveReviewText(params: {
+  requestId: number;
+  text: string;
+  reviewHash: string;
+}): Promise<void> {
+  const supabase = getSupabase();
+  if (!supabase) return;
+  await supabase.from("reviews").upsert({
+    request_id: params.requestId,
+    review_text: params.text,
+    review_hash: params.reviewHash,
+  });
+}

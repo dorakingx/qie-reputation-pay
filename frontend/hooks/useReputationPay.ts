@@ -6,7 +6,7 @@ import {
   useWaitForTransactionReceipt,
   useAccount,
 } from "wagmi";
-import { parseUnits, formatUnits } from "viem";
+import { parseUnits, formatUnits, keccak256, toBytes } from "viem";
 import {
   reputationPayAbi,
   mockQIEUSDAbi,
@@ -14,7 +14,7 @@ import {
   areContractsConfigured,
 } from "@/lib/contracts";
 import type { PaymentRequest, PaymentStatus } from "@/types";
-import { insertPaymentMetadata } from "@/lib/supabase";
+import { insertPaymentMetadata, saveReviewText } from "@/lib/supabase";
 
 export function useContractAddresses() {
   const { chainId } = useAccount();
@@ -34,6 +34,18 @@ export function usePaymentRequestOnChain(requestId: string) {
   });
 
   return { data, refetch, isLoading };
+}
+
+export function useEscrowBalance(requestId: string) {
+  const { reputationPay } = useContractAddresses();
+  const { data, refetch } = useReadContract({
+    address: reputationPay,
+    abi: reputationPayAbi,
+    functionName: "getEscrowBalance",
+    args: [BigInt(requestId)],
+    query: { enabled: Boolean(reputationPay) && areContractsConfigured() },
+  });
+  return { balance: data, refetch };
 }
 
 export function useUserStatsOnChain(address?: string) {
@@ -62,6 +74,7 @@ type OnChainPaymentRequest = {
   description: string;
   paid: boolean;
   completed: boolean;
+  refunded: boolean;
   createdAt: bigint;
 };
 
@@ -69,18 +82,21 @@ export function mapOnChainToPaymentRequest(
   raw: OnChainPaymentRequest,
   metadata?: { dueDate?: string; category?: string; creator?: string }
 ): PaymentRequest {
-  const { payer, recipient, amount, title, description, paid, completed, createdAt } =
+  const { payer, recipient, amount, title, description, paid, completed, refunded, createdAt } =
     raw;
 
   let status: PaymentStatus = "Pending";
-  if (completed) status = "Completed";
-  else if (paid) status = "Paid";
+  if (refunded) status = "Refunded";
+  else if (completed) status = "Completed";
+  else if (paid) status = "Escrowed";
+
+  const amountNum = Number(formatUnits(amount, 18));
 
   return {
     id: raw.id.toString(),
     title,
     description,
-    amount: Number(formatUnits(amount, 18)),
+    amount: amountNum,
     tokenSymbol: "QIEUSD",
     recipient,
     payer: payer === "0x0000000000000000000000000000000000000000" ? undefined : payer,
@@ -88,6 +104,7 @@ export function mapOnChainToPaymentRequest(
     dueDate: metadata?.dueDate ?? "—",
     category: (metadata?.category as PaymentRequest["category"]) ?? "Other",
     status,
+    escrowAmount: paid && !completed && !refunded ? amountNum : undefined,
     createdAt: new Date(Number(createdAt) * 1000).toISOString().split("T")[0],
   };
 }
@@ -191,6 +208,24 @@ export function useMarkCompleted() {
   return { markCompleted, isPending: isPending || isConfirming, hash };
 }
 
+export function useRefundRequest() {
+  const { reputationPay } = useContractAddresses();
+  const { writeContractAsync, data: hash, isPending } = useWriteContract();
+  const { isLoading: isConfirming } = useWaitForTransactionReceipt({ hash });
+
+  const refund = async (requestId: string) => {
+    if (!reputationPay) throw new Error("Contracts not configured");
+    await writeContractAsync({
+      address: reputationPay,
+      abi: reputationPayAbi,
+      functionName: "refundRequest",
+      args: [BigInt(requestId)],
+    });
+  };
+
+  return { refund, isPending: isPending || isConfirming, hash };
+}
+
 export function useLeaveReview() {
   const { reputationPay } = useContractAddresses();
   const { writeContractAsync, data: hash, isPending } = useWriteContract();
@@ -202,11 +237,17 @@ export function useLeaveReview() {
     reviewText: string
   ) => {
     if (!reputationPay) throw new Error("Contracts not configured");
+    const reviewHash = keccak256(toBytes(reviewText));
     await writeContractAsync({
       address: reputationPay,
       abi: reputationPayAbi,
       functionName: "leaveReview",
-      args: [BigInt(requestId), rating, reviewText],
+      args: [BigInt(requestId), rating, reviewHash],
+    });
+    await saveReviewText({
+      requestId: parseInt(requestId, 10),
+      text: reviewText,
+      reviewHash,
     });
   };
 

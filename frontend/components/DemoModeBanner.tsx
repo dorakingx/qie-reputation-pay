@@ -20,7 +20,7 @@ export function DemoModeBanner() {
           {!supabaseOk && "Supabase not configured — using local demo data. "}
           Run <code className="rounded bg-amber-100 px-1">npm run node</code> then{" "}
           <code className="rounded bg-amber-100 px-1">npm run deploy:local</code>{" "}
-          for full on-chain demo.
+          for full escrow-backed on-chain demo.
         </p>
       </div>
     </div>

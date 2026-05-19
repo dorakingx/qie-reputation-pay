@@ -100,7 +100,7 @@ export default function CreatePaymentRequestPage() {
     <div className="mx-auto max-w-2xl">
       <h1 className="mb-2 text-2xl font-bold">Create Payment Request</h1>
       <p className="mb-8 text-slate-600">
-        Send a stablecoin invoice to a client or collaborator.
+        Send an escrow-backed stablecoin invoice. Payers deposit QIEUSD into smart-contract escrow until you release funds on completion.
       </p>
 
       <form

@@ -1,189 +1,177 @@
 # QIE Reputation Pay
 
-**Stablecoin payments with identity-based reputation on the QIE ecosystem.**
+**Escrow-backed stablecoin payments with portable QIE reputation for freelancers, creators, and merchants.**
 
-> QIE Reputation Pay is a trust layer for stablecoin payments. It helps freelancers, creators, and small merchants receive payments while building portable reputation across the QIE ecosystem.
+> QIE Reputation Pay is a trust layer for stablecoin payments. It helps freelancers, creators, and small merchants receive payments safely while building portable reputation across the QIE ecosystem.
+
+[![CI](https://github.com/dorakingx/qie-reputation-pay/actions/workflows/ci.yml/badge.svg)](https://github.com/dorakingx/qie-reputation-pay/actions/workflows/ci.yml)
+
+## Hackathon Demo
+
+| Resource | Link |
+|----------|------|
+| **Live demo** | _Add Vercel URL before judging_ |
+| **Demo video** | _Add Loom/YouTube URL_ |
+| **3-minute script** | [docs/demo-script.md](docs/demo-script.md) |
+| **Judging criteria** | [docs/judging.md](docs/judging.md) |
+
+### Deployed contracts (QIE Testnet — chain 1983)
+
+| Contract | Address |
+|----------|---------|
+| MockQIEUSD | _Deploy with `npm run deploy:testnet` and paste address_ |
+| ReputationPay | _Deploy with `npm run deploy:testnet` and paste address_ |
+
+Explorer: [https://testnet.qie.digital/](https://testnet.qie.digital/)
+
+After deploy, addresses are written to `frontend/.env.local` and [docs/deployed-addresses.md](docs/deployed-addresses.md).
+
+### Screenshots
+
+Add screenshots to [docs/screenshots/](docs/screenshots/) and embed here before final submission.
+
+## Why this can win
+
+1. **Escrow-first payments** — QIEUSD held in contract until work is verified, not sent directly to strangers.
+2. **Portable reputation** — On-chain stats + review hashes; trust follows the wallet across QIE.
+3. **QIE-native story** — Testnet deployment, MockQIEUSD → QUSDC path, QIE Pass demo for Sybil resistance.
+4. **Judge-ready engineering** — 19+ tests, CI, demo mode fallback, 3-minute demo script.
 
 ## Problem
 
-Freelancers, creators, and small merchants in Web3 lack portable trust signals. Payments happen on-chain, but reputation is fragmented across platforms.
+Freelancers and merchants lack portable trust in Web3. Payments are easy; proving reliability across platforms is not.
 
 ## Solution
 
-QIE Reputation Pay combines stablecoin payments with an on-chain reputation system. Users connect a QIE-compatible wallet, create payment requests, pay with QIEUSD, complete work, leave reviews, and build a verifiable trust profile.
+Create escrow-backed payment requests, release funds on completion, leave verifiable reviews, and build a public trust profile with QIE Pass identity (demo).
 
-## Key Features
+## Key features
 
-- Wallet connection (wagmi + RainbowKit)
-- Payment request / invoice creation
-- Stablecoin payments via MockQIEUSD (QUSDC in production)
-- Mark transactions completed
-- On-chain reviews and ratings
-- Reputation score and trust badges
-- Public trust profiles per wallet address
-- Rule-based AI trust explanation
-- QIE ecosystem integration page
-- Demo data for hackathon judging
+- Escrow-backed QIEUSD payments (MockQIEUSD demo / QUSDC production path)
+- Refund after configurable delay if work not completed
+- On-chain reputation: completed payments, ratings, review hashes
+- QIE Pass verified badge (demo mock)
+- Rule-based AI trust insight
+- Demo mode without Supabase or contracts
+- Full Hardhat test suite + GitHub Actions CI
 
-## QIE Ecosystem Integration
-
-| Component | Status | Role |
-|-----------|--------|------|
-| QIE Wallet | Active | Login and payment authorization |
-| QIE Pass | Planned | Identity verification, Sybil resistance |
-| QUSDC / QIEUSD | Demo (MockQIEUSD) | Stable payments |
-| QIE DEX | Future | Auto-convert received payments |
-| QIE Oracle | Future | Risk scoring and credit limits |
-
-## Smart Contract Architecture
+## Smart contract architecture
 
 ```
 MockQIEUSD (ERC20)
-    └── approve → ReputationPay
+    └── approve → ReputationPay (escrow)
                       ├── createPaymentRequest()
-                      ├── payRequest()
-                      ├── markCompleted()
-                      └── leaveReview()
+                      ├── payRequest()        → funds held in escrow
+                      ├── markCompleted()     → release to recipient
+                      ├── refundRequest()     → return to payer
+                      └── leaveReview()       → rating + reviewHash
 ```
 
-**ReputationPay** tracks:
-- Payment requests (id, payer, recipient, amount, status)
-- User stats (completed payments, total received, reviews, rating sum)
+**Events:** `PaymentRequestCreated`, `PaymentEscrowed`, `PaymentReleased`, `PaymentRefunded`, `ReviewLeft`
 
-**Events:** `PaymentRequestCreated`, `PaymentPaid`, `PaymentCompleted`, `ReviewLeft`
+See [docs/architecture.md](docs/architecture.md).
 
-## Project Structure
+## QIE ecosystem integration
 
-```
-/contracts          Solidity contracts
-/scripts            Hardhat deploy script
-/frontend           Next.js app
-/supabase           Database seed SQL
-```
+| Component | Status |
+|-----------|--------|
+| QIE Wallet | Active |
+| QIE Testnet (1983) | Active |
+| MockQIEUSD | Active (demo) |
+| QIE Pass | Demo verification |
+| QIE DEX | Future |
+| QIE Oracle | Future |
 
-## How to Run Locally
+## How to run locally
 
 ### Prerequisites
 
 - Node.js 20.9+ recommended
 - MetaMask or QIE Wallet
-- (Optional) Supabase project
 
-### 1. Install dependencies
+### Install
 
 ```bash
 npm install
+cd frontend && npm install --legacy-peer-deps
 ```
 
-### 2. Start local blockchain
+### Contracts
 
 ```bash
+# Terminal 1
 npm run node
-```
 
-In a new terminal:
-
-```bash
+# Terminal 2
 npm run deploy:local
+
+# Test
+npm test
 ```
 
-This deploys contracts and writes addresses to `frontend/.env.local`.
-
-### 3. Configure Supabase (optional)
-
-1. Create a Supabase project
-2. Run `supabase/seed.sql` in the SQL editor
-3. Add to `frontend/.env.local`:
-
-```
-NEXT_PUBLIC_SUPABASE_URL=your_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key
-```
-
-Without Supabase, the app uses built-in demo data.
-
-### 4. Start frontend
+### Frontend
 
 ```bash
 npm run dev
+# http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Copy `frontend/.env.example` → `frontend/.env.local` (deploy script auto-fills contract addresses).
 
-### 5. Add QIE Testnet to wallet (for testnet deploy)
+### Supabase (optional)
+
+1. Create a Supabase project
+2. Run [supabase/seed.sql](supabase/seed.sql)
+3. Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+### QIE Testnet
 
 | Field | Value |
 |-------|-------|
-| Network | QIE Testnet |
 | Chain ID | 1983 |
 | RPC | https://rpc1testnet.qie.digital/ |
-| Explorer | https://testnet.qie.digital/ |
 | Faucet | https://www.qie.digital/faucet |
 
-Deploy to testnet:
-
 ```bash
-# Set PRIVATE_KEY in .env
+# .env at repo root: PRIVATE_KEY=...
 npm run deploy:testnet
 ```
 
-## Deploy
+## 3-minute demo flow
 
-- **Frontend:** Deploy `frontend/` to Vercel
-- **Contracts:** `npm run deploy:testnet` with funded wallet
+1. Connect wallet
+2. Create escrow-backed payment request
+3. Pay into escrow with MockQIEUSD
+4. Recipient releases escrow (mark completed)
+5. Payer leaves review (hash on-chain)
+6. View trust profile + QIE Pass badge
+7. Show QIE ecosystem page
 
-Set environment variables in Vercel:
-- `NEXT_PUBLIC_REPUTATION_PAY_ADDRESS`
-- `NEXT_PUBLIC_MOCK_QIEUSD_ADDRESS`
-- `NEXT_PUBLIC_SUPABASE_URL` (optional)
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` (optional)
-- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`
+Full script: [docs/demo-script.md](docs/demo-script.md)
 
-## Demo Flow
+## Security notes
 
-1. **Connect wallet** — Use MetaMask with Hardhat local (chain 31337) or QIE testnet
-2. **Create payment request** — `/app/create` with title, amount, recipient
-3. **Pay with MockQIEUSD** — Switch to payer account, open request, click Pay
-4. **Mark completed** — Switch to recipient account, mark work done
-5. **Leave review** — Switch to payer, submit 1–5 star review
-6. **See reputation increase** — View profile at `/app/profile/[address]`
-7. **View trust profile** — Check score, badge, and AI trust explanation
+- `ReentrancyGuard` on escrow deposit, release, and refund
+- OpenZeppelin `SafeERC20`
+- Custom errors for clear revert reasons
+- Review text off-chain; `reviewHash` on-chain for integrity
+- Access control: only recipient releases, only payer refunds/reviews
 
-### Demo Accounts (Hardhat)
+## Known limitations
 
-After `npm run node`, account #0 is deployer, #1 Alice, #2 Bob, #3 Carol.
+- MockQIEUSD instead of production QUSDC
+- QIE Pass is mock verification (localStorage + demo data)
+- Refund delay: 60s local, 24h testnet (see deploy script)
+- Reputation score computed client-side for demo clarity
 
-Import Hardhat private keys into MetaMask for multi-wallet demo.
+## Future roadmap
 
-### Demo Profiles (mock data)
-
-| User | Address | Trust Level |
-|------|---------|-------------|
-| Maya Chen (Designer) | `0x7099...79C8` | Highly Trusted |
-| Dr. Alex Rivera (Researcher) | `0x3C44...93BC` | Trusted Seller |
-| ShopWave Store (Merchant) | `0x90F7...b906` | Verified Starter |
-
-## Reputation Formula
-
-```
-reputationScore = min(100, completedPayments * 10 + averageRating * 20 + numberOfReviews * 5)
-```
-
-| Score | Trust Level |
-|-------|-------------|
-| 0–20 | New User |
-| 21–50 | Verified Starter |
-| 51–80 | Trusted Seller |
-| 81–100 | Highly Trusted |
-
-## Future Roadmap
-
-- Replace MockQIEUSD with QUSDC
-- QIE Pass identity verification
-- QIE DEX auto-conversion on payment receipt
+- Replace MockQIEUSD with [QUSDC](https://docs.stable.qie.digital/)
+- Real QIE Pass API integration
+- QIE DEX auto-conversion on receipt
 - QIE Oracle risk-based credit limits
-- Indexed subgraph for faster queries
-- Escrow and dispute resolution
+- Subgraph indexer for faster queries
+- Dispute resolution module
 
 ## License
 

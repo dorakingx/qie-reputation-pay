@@ -15,7 +15,8 @@ function buildProfile(
   completedPayments: number,
   averageRating: number,
   numberOfReviews: number,
-  totalReceived: number
+  totalReceived: number,
+  qiePassVerified = false
 ): UserProfile {
   const reputationScore = calculateReputationScore(
     completedPayments,
@@ -32,6 +33,7 @@ function buildProfile(
     totalReceived,
     reputationScore,
     trustLevel: getTrustLevel(reputationScore),
+    qiePassVerified,
   };
 }
 
@@ -43,7 +45,8 @@ export const demoProfiles: UserProfile[] = [
     8,
     4.8,
     6,
-    4200
+    4200,
+    true
   ),
   buildProfile(
     DEMO_USERS.bob,
@@ -52,7 +55,8 @@ export const demoProfiles: UserProfile[] = [
     5,
     4.5,
     4,
-    2800
+    2800,
+    true
   ),
   buildProfile(
     DEMO_USERS.carol,
@@ -61,7 +65,8 @@ export const demoProfiles: UserProfile[] = [
     2,
     4.0,
     2,
-    950
+    950,
+    false
   ),
 ];
 
@@ -91,7 +96,7 @@ export const demoPaymentRequests: PaymentRequest[] = [
     creator: DEMO_USERS.bob,
     dueDate: "2026-06-15",
     category: "Research Support",
-    status: "Paid",
+    status: "Escrowed",
     createdAt: "2026-04-12",
   },
   {

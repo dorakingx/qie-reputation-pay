@@ -1,29 +1,32 @@
 "use client";
 
-import { use } from "react";
+import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { TrustBadge } from "@/components/TrustBadge";
 import { ReputationBar } from "@/components/ReputationBar";
 import { TrustExplanation } from "@/components/TrustExplanation";
 import { ReviewCard } from "@/components/ReviewCard";
+import { QiePassBadge } from "@/components/QiePassBadge";
+import { OnChainVerifiedBadge } from "@/components/OnChainVerifiedBadge";
+import { CopyProfileLink } from "@/components/CopyProfileLink";
 import {
   getProfileByAddress,
   getReviewsForUser,
   demoProfiles,
 } from "@/lib/demoData";
-import {
-  useUserStatsOnChain,
-} from "@/hooks/useReputationPay";
+import { useUserStatsOnChain } from "@/hooks/useReputationPay";
 import { areContractsConfigured } from "@/lib/contracts";
 import {
   calculateReputationScore,
   getTrustLevel,
   averageFromSum,
 } from "@/lib/reputation";
+import { isQiePassVerified, verifyWithQiePass } from "@/lib/qiePass";
 import { truncateAddress, copyToClipboard, formatAmount } from "@/lib/utils";
 import { toast } from "sonner";
-import { Copy, ArrowLeft } from "lucide-react";
+import { Copy, ArrowLeft, Shield } from "lucide-react";
 import { formatUnits } from "viem";
+import { useAccount } from "wagmi";
 
 export default function ProfilePage({
   params,
@@ -31,7 +34,13 @@ export default function ProfilePage({
   params: Promise<{ address: string }>;
 }) {
   const { address } = use(params);
+  const { address: connectedAddress } = useAccount();
   const { data: onChainStats } = useUserStatsOnChain(address as `0x${string}`);
+  const [passVerified, setPassVerified] = useState(false);
+
+  useEffect(() => {
+    setPassVerified(isQiePassVerified(address));
+  }, [address]);
 
   const demoProfile = getProfileByAddress(address);
   const reviews = getReviewsForUser(address);
@@ -56,6 +65,15 @@ export default function ProfilePage({
     numberOfReviews
   );
   const trustLevel = getTrustLevel(reputationScore);
+
+  const isOwnProfile =
+    connectedAddress?.toLowerCase() === address.toLowerCase();
+
+  const handleVerifyPass = () => {
+    verifyWithQiePass(address);
+    setPassVerified(true);
+    toast.success("QIE Pass verified (demo mode)");
+  };
 
   const copyAddress = () => {
     copyToClipboard(address);
@@ -84,9 +102,35 @@ export default function ProfilePage({
               {truncateAddress(address, 6)}
               <Copy className="h-3.5 w-3.5" />
             </button>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <QiePassBadge verified={passVerified} />
+              <OnChainVerifiedBadge />
+            </div>
           </div>
-          <TrustBadge level={trustLevel} />
+          <div className="flex flex-col items-end gap-2">
+            <TrustBadge level={trustLevel} />
+            <CopyProfileLink address={address} />
+          </div>
         </div>
+
+        {isOwnProfile && !passVerified && (
+          <div className="mb-6 rounded-lg border border-indigo-200 bg-indigo-50 p-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="font-medium text-indigo-900">Verify with QIE Pass</p>
+                <p className="text-sm text-indigo-700">
+                  Demo: link your identity to reduce Sybil attacks and duplicate reputation farming.
+                </p>
+              </div>
+              <button
+                onClick={handleVerifyPass}
+                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+              >
+                Verify with QIE Pass
+              </button>
+            </div>
+          </div>
+        )}
 
         <ReputationBar score={reputationScore} />
 
@@ -107,14 +151,26 @@ export default function ProfilePage({
           </div>
           <div className="rounded-lg bg-slate-50 p-4">
             <p className="text-sm text-slate-500">Total Received</p>
-            <p className="text-2xl font-bold">
-              {formatAmount(totalReceived)}
-            </p>
+            <p className="text-2xl font-bold">{formatAmount(totalReceived)}</p>
           </div>
         </div>
 
         <div className="mt-6">
           <TrustExplanation score={reputationScore} />
+        </div>
+
+        <div className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <div className="flex gap-2">
+            <Shield className="h-5 w-5 shrink-0 text-indigo-600" />
+            <div>
+              <p className="font-medium text-slate-900">QIE Pass & Sybil resistance</p>
+              <p className="mt-1 text-sm text-slate-600">
+                QIE Pass ties a verified identity to this wallet so reputation cannot be
+                easily farmed with duplicate accounts. Production will integrate the official
+                QIE Pass API; this demo uses mock verification for hackathon judging.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
