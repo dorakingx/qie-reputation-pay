@@ -1,6 +1,7 @@
 // Auto-generated - do not edit manually
 export const DEPLOYED = {
-  chainId: 31337,
-  mockQIEUSD: "0x5FbDB2315678afecb367f032d93F642f64180aa3" as const,
-  reputationPay: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512" as const,
+  chainId: 1983,
+  mockQIEUSD: "0xeD16CBCfb5Fa00A363963A49445e08290Ed8d5B0" as const,
+  reputationPay: "0x1273BF4bda6aD31BBA25eA7ee10013FaAf591Aa1" as const,
+  refundDelay: 86400,
 } as const;

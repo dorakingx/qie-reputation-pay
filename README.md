@@ -8,11 +8,11 @@
 
 ## If you only have 3 minutes
 
-1. Open the live demo or [`/demo`](http://localhost:3000/demo)
+1. Open the [live demo](https://qie-reputation-pay.vercel.app) or [`/demo`](https://qie-reputation-pay.vercel.app/demo)
 2. View the escrow-backed payment flow
-3. Open [`/app/request/demo`](http://localhost:3000/app/request/demo)
+3. Open [`/app/request/demo`](https://qie-reputation-pay.vercel.app/app/request/demo)
 4. See QIEUSD held in escrow
-5. Open [`/app/profile/demo`](http://localhost:3000/app/profile/demo)
+5. Open [`/app/profile/demo`](https://qie-reputation-pay.vercel.app/app/profile/demo)
 6. See QIE Pass demo verification and portable reputation
 7. Check [docs/judging.md](docs/judging.md) for criteria mapping
 
@@ -20,13 +20,13 @@
 
 | Field | Value |
 |-------|-------|
-| **Live demo URL** | Pending before final submission |
+| **Live demo URL** | https://qie-reputation-pay.vercel.app |
 | **Demo video URL** | Pending before final submission |
 | **GitHub repo URL** | https://github.com/dorakingx/qie-reputation-pay |
-| **MockQIEUSD address (QIE testnet)** | Pending before final submission |
-| **ReputationPay address (QIE testnet)** | Pending before final submission |
-| **MockQIEUSD explorer link** | Pending before final submission |
-| **ReputationPay explorer link** | Pending before final submission |
+| **MockQIEUSD address (QIE testnet)** | `0xeD16CBCfb5Fa00A363963A49445e08290Ed8d5B0` |
+| **ReputationPay address (QIE testnet)** | `0x1273BF4bda6aD31BBA25eA7ee10013FaAf591Aa1` |
+| **MockQIEUSD explorer link** | https://testnet.qie.digital/address/0xeD16CBCfb5Fa00A363963A49445e08290Ed8d5B0 |
+| **ReputationPay explorer link** | https://testnet.qie.digital/address/0x1273BF4bda6aD31BBA25eA7ee10013FaAf591Aa1 |
 | **CI status** | Passing on main |
 | **Test status** | 24 passing — `npm test` ([`test/ReputationPay.ts`](test/ReputationPay.ts)) |
 | **Screenshot status** | Pending before final submission |
@@ -199,9 +199,10 @@ npm run dev           # http://localhost:3000
 
 | Resource | Link |
 |----------|------|
-| In-app walkthrough | [/demo](http://localhost:3000/demo) |
-| Escrow example | [/app/request/demo](http://localhost:3000/app/request/demo) |
-| QIE Pass profile | [/app/profile/demo](http://localhost:3000/app/profile/demo) |
+| In-app walkthrough | [/demo](https://qie-reputation-pay.vercel.app/demo) |
+| Escrow example | [/app/request/demo](https://qie-reputation-pay.vercel.app/app/request/demo) |
+| QIE Pass profile | [/app/profile/demo](https://qie-reputation-pay.vercel.app/app/profile/demo) |
+| Deployed contracts | [docs/deployed-addresses.md](docs/deployed-addresses.md) |
 | Read-aloud script | [docs/demo-script.md](docs/demo-script.md) |
 | Judging criteria | [docs/judging.md](docs/judging.md) |
 
@@ -243,8 +244,8 @@ _No screenshot files in docs/screenshots/ yet. Run `npm run docs:screenshots` af
 
 - MockQIEUSD is not production QUSDC
 - QIE Pass is demo/mock until real API exists
-- QIE testnet deployment is **ready to deploy** — addresses not filled until you run deploy
-- Live demo URL and demo video are **pending** until you deploy and record
+- Live demo on Vercel requires **environment variables** on Vercel (see [deployed-addresses.md](docs/deployed-addresses.md)) for full on-chain mode; demo routes work without them
+- Demo video is **pending** until recorded
 - Reputation score computed client-side for demo clarity
 
 ## Future roadmap

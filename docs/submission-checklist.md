@@ -4,7 +4,7 @@ Use this checklist before final judging.
 
 ## If you only have 3 minutes
 
-1. Open the live demo or `/demo`
+1. Open the live demo https://qie-reputation-pay.vercel.app or `/demo`
 2. View the escrow-backed payment flow
 3. Open `/app/request/demo`
 4. See QIEUSD held in escrow
@@ -16,13 +16,13 @@ Use this checklist before final judging.
 
 | Field | Value |
 |-------|-------|
-| **Live demo URL** | Pending before final submission |
+| **Live demo URL** | https://qie-reputation-pay.vercel.app |
 | **Demo video URL** | Pending before final submission |
 | **GitHub repo URL** | https://github.com/dorakingx/qie-reputation-pay |
-| **MockQIEUSD address (QIE testnet)** | Pending before final submission |
-| **ReputationPay address (QIE testnet)** | Pending before final submission |
-| **MockQIEUSD explorer link** | Pending before final submission |
-| **ReputationPay explorer link** | Pending before final submission |
+| **MockQIEUSD address (QIE testnet)** | `0xeD16CBCfb5Fa00A363963A49445e08290Ed8d5B0` |
+| **ReputationPay address (QIE testnet)** | `0x1273BF4bda6aD31BBA25eA7ee10013FaAf591Aa1` |
+| **MockQIEUSD explorer link** | https://testnet.qie.digital/address/0xeD16CBCfb5Fa00A363963A49445e08290Ed8d5B0 |
+| **ReputationPay explorer link** | https://testnet.qie.digital/address/0x1273BF4bda6aD31BBA25eA7ee10013FaAf591Aa1 |
 | **CI status** | Passing on main — [GitHub Actions](https://github.com/dorakingx/qie-reputation-pay/actions) |
 | **Test status** | 24 passing — `npm test` ([`test/ReputationPay.ts`](../test/ReputationPay.ts)) |
 | **Screenshot status** | Pending before final submission |
@@ -79,10 +79,10 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 
 ## Final steps before submission
 
-- [ ] Deploy contracts to QIE testnet (see above)
-- [ ] Paste contract addresses and explorer links into Final submission table
-- [ ] Deploy frontend to Vercel
-- [ ] Add Vercel URL to Live demo URL row
+- [x] Deploy contracts to QIE testnet (see [deployed-addresses.md](deployed-addresses.md))
+- [x] Paste contract addresses and explorer links into Final submission table
+- [x] Deploy frontend to Vercel — https://qie-reputation-pay.vercel.app
+- [x] Add Vercel URL to Live demo URL row
 - [ ] Record 2–3 minute demo video ([docs/demo-script.md](demo-script.md))
 - [ ] Capture screenshots and run `npm run docs:screenshots`
 - [ ] Run `npm test`
@@ -142,8 +142,8 @@ npm run docs:screenshots
 
 ## What you still need to do manually
 
-1. Deploy to QIE testnet (`npm run deploy:testnet`)
-2. Deploy frontend to Vercel (`cd frontend && vercel`)
+1. ~~Deploy to QIE testnet~~ — done ([deployed-addresses.md](deployed-addresses.md))
+2. ~~Deploy frontend to Vercel~~ — done (https://qie-reputation-pay.vercel.app)
 3. Record demo video (2–3 min, [docs/demo-script.md](demo-script.md))
 4. Add screenshots to `docs/screenshots/` and run `npm run docs:screenshots`
 5. Fill Final submission table (replace all Pending rows)
