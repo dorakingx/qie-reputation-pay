@@ -6,7 +6,6 @@ import {
   Wallet,
   BadgeCheck,
   Lock,
-  TrendingUp,
 } from "lucide-react";
 
 export default function LandingPage() {
@@ -33,14 +32,15 @@ export default function LandingPage() {
         <p className="mb-2 inline-block rounded-full bg-teal-50 px-4 py-1 text-sm font-medium text-teal-700">
           QIE Ecosystem · Hackathon 2026
         </p>
-        <p className="mx-auto mb-4 max-w-2xl text-sm text-slate-500">
-          Built on QIE Testnet with wallet login, escrow contracts, review hashes, and QIE Pass demo verification.
-        </p>
-        <h1 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 md:text-5xl">
-          Escrow-backed QIEUSD payments + portable reputation for freelancers and merchants.
+        <h1 className="mb-3 text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+          QIE Reputation Pay
         </h1>
+        <h2 className="mx-auto mb-4 max-w-3xl text-xl font-semibold text-slate-800 md:text-2xl">
+          Escrow-backed QIEUSD payments + portable reputation for freelancers and merchants.
+        </h2>
         <p className="mx-auto mb-8 max-w-2xl text-lg text-slate-600">
-          Pay safely with QIEUSD held in escrow until work is done. Build verifiable trust that travels with your wallet across the QIE ecosystem.
+          Web3 payments move money. QIE Reputation Pay proves trust — with escrow, verified
+          reviews, QIE Pass demo verification, and public reputation profiles.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Link
@@ -54,7 +54,7 @@ export default function LandingPage() {
             href="/demo"
             className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-8 py-4 text-lg font-semibold text-slate-700 hover:bg-slate-50"
           >
-            Judge Demo
+            View 3-minute demo flow
           </Link>
         </div>
       </section>
@@ -64,18 +64,18 @@ export default function LandingPage() {
           {[
             {
               icon: Lock,
-              title: "Pay safely with QIEUSD",
-              desc: "Funds stay in smart-contract escrow until the recipient marks work complete.",
+              title: "Escrow-backed stablecoin payments",
+              desc: "QIEUSD stays in the smart contract until work is verified and released.",
+            },
+            {
+              icon: BadgeCheck,
+              title: "QIE Pass verified trust profiles",
+              desc: "Demo QIE Pass links identity to reputation and reduces Sybil farming.",
             },
             {
               icon: Star,
-              title: "Build trust with verified reviews",
-              desc: "On-chain ratings and review hashes plus QIE Pass identity reduce Sybil farming.",
-            },
-            {
-              icon: TrendingUp,
-              title: "Unlock reputation-based opportunities",
-              desc: "Portable trust scores help freelancers and merchants win better clients.",
+              title: "On-chain reputation from completed work",
+              desc: "Ratings, review hashes, and portable trust scores follow your wallet.",
             },
           ].map((card) => (
             <div
@@ -92,13 +92,21 @@ export default function LandingPage() {
 
       <section className="py-14">
         <div className="mx-auto max-w-3xl px-4 text-center">
-          <h2 className="mb-4 text-2xl font-bold">Why this matters</h2>
+          <h2 className="mb-4 text-2xl font-bold">Why QIE?</h2>
           <p className="text-slate-600">
-            Web3 payments are easy — but Web3 trust is still fragmented. Freelancers and merchants
-            repeat KYC and reputation building on every platform. QIE Reputation Pay combines
-            escrow-backed QIEUSD payments with wallet-native reputation so trust is portable,
-            verifiable, and composable across the QIE ecosystem.
+            QIE Reputation Pay is built for the QIE identity and payment ecosystem. QIE Wallet
+            handles payment authorization, QIEUSD/QUSDC enables stable payments, QIE Pass provides
+            Sybil-resistant identity, and the reputation profile becomes a portable trust layer
+            across QIE apps.
           </p>
+          <ul className="mt-6 space-y-2 text-left text-sm text-slate-600 md:mx-auto md:max-w-lg">
+            <li>• EVM-compatible — Solidity escrow runs directly on QIE</li>
+            <li>• Low fees — practical for freelance and creator payments</li>
+            <li>• QIE Pass — reduces fake accounts and reputation farming</li>
+            <li>• QIE Wallet — simple onboarding</li>
+            <li>• QIE DEX (future) — auto-convert received stablecoins</li>
+            <li>• QIE Oracle (future) — risk-based credit limits</li>
+          </ul>
         </div>
       </section>
 
@@ -117,9 +125,9 @@ export default function LandingPage() {
               <tbody className="divide-y divide-slate-200">
                 {[
                   ["QIE Wallet", "Active", "Login and escrow payment authorization"],
-                  ["QIE Testnet", "Active", "Chain ID 1983 — live deployment ready"],
-                  ["MockQIEUSD / QUSDC", "Active (demo)", "Escrow-backed stable payments"],
-                  ["QIE Pass", "Demo verification", "Sybil-resistant identity layer"],
+                  ["QIE Testnet", "Ready to deploy", "Chain ID 1983"],
+                  ["MockQIEUSD / QUSDC", "Demo / mock", "Escrow-backed stable payments"],
+                  ["QIE Pass", "Demo mock", "Sybil-resistant identity layer"],
                   ["QIE DEX", "Future", "Auto-convert received payments"],
                   ["QIE Oracle", "Future", "Risk scoring and credit limits"],
                 ].map(([name, status, role]) => (
@@ -128,11 +136,13 @@ export default function LandingPage() {
                     <td className="px-4 py-3">
                       <span
                         className={
-                          status.includes("Active")
+                          status === "Active"
                             ? "text-emerald-600"
-                            : status.includes("Demo")
+                            : status.includes("Demo") || status.includes("mock")
                               ? "text-blue-600"
-                              : "text-slate-500"
+                              : status.includes("Ready")
+                                ? "text-amber-600"
+                                : "text-slate-500"
                         }
                       >
                         {status}
@@ -172,7 +182,7 @@ export default function LandingPage() {
       </section>
 
       <footer className="border-t border-slate-200 py-8 text-center text-sm text-slate-500">
-        QIE Reputation Pay · Hackathon MVP 2026
+        QIE Reputation Pay · Hackathon 2026
       </footer>
     </div>
   );

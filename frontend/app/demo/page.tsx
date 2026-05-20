@@ -1,51 +1,41 @@
 import Link from "next/link";
-import { ArrowLeft, Clock } from "lucide-react";
+import { ArrowLeft, Clock, ExternalLink } from "lucide-react";
 
 const steps = [
   {
-    time: "20s",
-    title: "Explain the problem",
-    body: "Web3 payments are easy, but trust is fragmented. Freelancers rebuild reputation on every platform.",
-  },
-  {
-    time: "15s",
+    time: "0:20–0:40",
     title: "Connect wallet",
-    body: "Launch App → Connect Wallet. Use QIE Testnet (1983) or Hardhat local (31337).",
+    body: "Launch App → Connect Wallet. Use QIE Testnet (chain 1983) or Hardhat local (31337).",
   },
   {
-    time: "30s",
-    title: "Create escrow-backed payment request",
-    body: "Create → title, amount, recipient → submit. Copy payment link.",
+    time: "0:40–1:10",
+    title: "Create payment request",
+    body: "Create → title, amount, recipient → submit. Copy the payment link to share with the payer.",
   },
   {
-    time: "30s",
+    time: "1:10–1:40",
     title: "Pay into escrow",
-    body: "Switch to payer wallet → open link → Pay into Escrow (QIEUSD). Funds held in contract.",
+    body: "Switch to payer wallet → open link → Pay into Escrow (QIEUSD). Funds are held in the contract, not sent directly.",
   },
   {
-    time: "25s",
-    title: "Release escrow",
-    body: "Switch to recipient → Release Escrow & Complete. Recipient receives QIEUSD.",
+    time: "1:40–2:00",
+    title: "Release funds after completion",
+    body: "Switch to recipient → Release Escrow & Complete. Recipient receives QIEUSD only after marking work done.",
   },
   {
-    time: "20s",
+    time: "2:00–2:20",
     title: "Leave review",
-    body: "Payer submits rating + text. Rating and hash stored on-chain.",
+    body: "Payer submits rating + text. Rating and reviewHash are stored on-chain.",
   },
   {
-    time: "30s",
-    title: "Trust profile + QIE Pass",
-    body: "Open profile → reputation score, trust badge, QIE Pass Verified. Verify with QIE Pass (demo) on own profile.",
+    time: "2:20–2:40",
+    title: "View QIE Pass verified profile",
+    body: "Open recipient profile → reputation score, trust badge, QIE Pass Verified. On your own profile: Verify with QIE Pass (demo).",
   },
   {
-    time: "20s",
-    title: "QIE ecosystem",
-    body: "About page → Wallet, Testnet, MockQIEUSD, QIE Pass demo, DEX/Oracle future.",
-  },
-  {
-    time: "10s",
-    title: "Engineering proof",
-    body: "24 contract tests, CI on GitHub, escrow + refund + review hashes.",
+    time: "2:40–3:00",
+    title: "Explain QIE ecosystem expansion",
+    body: "About page → QIE Wallet, Testnet, MockQIEUSD, QIE Pass demo, DEX/Oracle future. Mention 24 contract tests and CI on GitHub.",
   },
 ];
 
@@ -71,11 +61,28 @@ export default function DemoPage() {
         <div className="mb-8 text-center">
           <p className="mb-2 inline-flex items-center gap-1 rounded-full bg-teal-50 px-3 py-1 text-sm font-medium text-teal-700">
             <Clock className="h-4 w-4" />
-            ~3 minutes
+            3-minute demo timeline · ~3:00 total
           </p>
-          <h1 className="text-3xl font-bold text-slate-900">Judge Demo Guide</h1>
+          <h1 className="text-3xl font-bold text-slate-900">Judge Demo Walkthrough</h1>
           <p className="mt-2 text-slate-600">
-            Follow these steps to demo QIE Reputation Pay end-to-end.
+            Follow these seven steps for a smooth hackathon demo. Problem and solution: see{" "}
+            <a
+              href="https://github.com/dorakingx/qie-reputation-pay/blob/main/docs/demo-script.md"
+              className="text-teal-600 hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              demo-script.md
+            </a>
+            .
+          </p>
+        </div>
+
+        <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-600">
+          <strong className="text-slate-900">0:00–0:20 Problem · 0:20–0:40 Solution</strong>
+          <p className="mt-1">
+            Web3 payments move money, but they do not prove trust. QIE Reputation Pay adds escrow,
+            verified completion, and portable reputation for freelancers and merchants.
           </p>
         </div>
 
@@ -100,20 +107,30 @@ export default function DemoPage() {
         <div className="mt-8 rounded-xl border border-amber-200 bg-amber-50 p-5">
           <h2 className="font-semibold text-amber-900">Backup demo mode</h2>
           <p className="mt-2 text-sm text-amber-800">
-            If contracts are not deployed, the app shows a demo mode banner and uses built-in
-            sample data. All pages work without Supabase or contract addresses.
+            This app can be demoed without deployed contracts or Supabase using built-in demo data.
+            If contract addresses are not configured, a demo mode banner appears and all pages work
+            with sample payment requests and profiles.
           </p>
         </div>
 
-        <p className="mt-6 text-center text-sm text-slate-500">
-          Full checklist:{" "}
+        <p className="mt-6 flex flex-col items-center gap-2 text-center text-sm text-slate-500 sm:flex-row sm:justify-center">
+          <a
+            href="https://github.com/dorakingx/qie-reputation-pay/blob/main/docs/demo-script.md"
+            className="inline-flex items-center gap-1 text-teal-600 hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Read-aloud demo script
+            <ExternalLink className="h-3.5 w-3.5" />
+          </a>
+          <span className="hidden sm:inline">·</span>
           <a
             href="https://github.com/dorakingx/qie-reputation-pay/blob/main/docs/submission-checklist.md"
             className="text-teal-600 hover:underline"
             target="_blank"
             rel="noopener noreferrer"
           >
-            submission-checklist.md
+            Submission checklist
           </a>
         </p>
       </main>

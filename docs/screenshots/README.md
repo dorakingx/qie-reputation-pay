@@ -1,16 +1,21 @@
 # Screenshots for Hackathon Submission
 
-Add PNG screenshots to this folder before final judging. Suggested filenames:
+Add PNG screenshots to this folder before final judging.
+
+**Status:** Pending before final submission
+
+## Checklist (8 files)
 
 | # | Filename | What to capture |
 |---|----------|-----------------|
-| 1 | `01-landing.png` | Landing page hero — escrow + QIE reputation headline, Judge Demo button |
-| 2 | `02-dashboard.png` | Dashboard with stats, demo payment requests, demo mode banner if applicable |
+| 1 | `01-landing.png` | Landing hero — title, product story, three cards, “View 3-minute demo flow” |
+| 2 | `02-dashboard.png` | Dashboard with stats, payment requests, demo mode banner if applicable |
 | 3 | `03-create-request.png` | Create payment request form filled out |
-| 4 | `04-escrow-status.png` | Payment request detail — "In Escrow" badge, pay/release actions |
+| 4 | `04-request-escrow.png` | Payment request detail — escrow badge, pay/release actions |
 | 5 | `05-profile.png` | Public reputation profile — score bar, trust badge, stats |
-| 6 | `06-qie-pass-badge.png` | Profile showing QIE Pass Verified badge + explanation |
-| 7 | `07-qie-ecosystem.png` | `/app/about` — QIE ecosystem integration page |
+| 6 | `06-qie-pass-badge.png` | Profile showing QIE Pass Verified badge + Sybil explanation |
+| 7 | `07-demo-page.png` | `/demo` — 3-minute judge walkthrough |
+| 8 | `08-qie-ecosystem.png` | `/app/about` — QIE ecosystem integration page |
 
 ## How to capture
 
@@ -21,8 +26,4 @@ Add PNG screenshots to this folder before final judging. Suggested filenames:
 
 ## Embed in README
 
-After adding files, update the Screenshots section in [README.md](../README.md) with:
-
-```markdown
-![Landing](docs/screenshots/01-landing.png)
-```
+After adding files, uncomment the image block in [README.md](../README.md) Screenshots section.

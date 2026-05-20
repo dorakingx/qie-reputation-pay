@@ -1,27 +1,38 @@
 # Hackathon Submission Checklist
 
-Use this checklist before final judging. Check items as you complete them.
+Use this checklist before final judging.
 
-## Links
+## Final submission
 
-- [ ] **Live demo URL** — _TBD (deploy frontend to Vercel)_
-- [ ] **Demo video URL** — _Optional but recommended (Loom/YouTube, ~3 min)_
-- [x] **GitHub repo** — https://github.com/dorakingx/qie-reputation-pay
+| Field | Value |
+|-------|-------|
+| **Live demo URL** | Pending before final submission |
+| **Demo video URL** | Pending before final submission |
+| **GitHub repo** | https://github.com/dorakingx/qie-reputation-pay |
+| **MockQIEUSD (QIE testnet)** | Pending before final submission |
+| **ReputationPay (QIE testnet)** | Pending before final submission |
+| **QIE explorer links** | Pending before final submission — template: `https://testnet.qie.digital/address/{address}` |
+| **Vercel deployment** | Pending before final submission |
+| **CI** | Passing on main — [GitHub Actions](https://github.com/dorakingx/qie-reputation-pay/actions) |
+| **Tests** | 24 passing — run `npm test` (`test/ReputationPay.ts`) |
+| **Screenshots** | Pending before final submission — 8 files in [docs/screenshots/](screenshots/README.md) |
 
-## QIE Testnet contracts (chain ID 1983)
+After deploy, replace **Pending before final submission** with real URLs and addresses. Do not add fake values.
 
-Deploy with:
+---
+
+## Deploy QIE testnet contracts (chain ID 1983)
 
 ```bash
 # Set PRIVATE_KEY in .env at repo root
 npm run deploy:testnet
 ```
 
-Then paste addresses here:
+Then update the Final submission table:
 
-- [ ] **MockQIEUSD:** `0x...`
-- [ ] **ReputationPay:** `0x...`
-- [ ] **Explorer:** https://testnet.qie.digital/address/`<address>`
+- **MockQIEUSD:** `0x...`
+- **ReputationPay:** `0x...`
+- **Explorer:** https://testnet.qie.digital/address/`{address}`
 
 ## Vercel environment variables
 
@@ -46,23 +57,13 @@ Without Supabase, the app uses built-in demo data.
 
 ## Screenshots
 
-Capture 7 screenshots per [docs/screenshots/README.md](screenshots/README.md) and add to `docs/screenshots/`.
+Capture 8 screenshots per [docs/screenshots/README.md](screenshots/README.md) and add PNGs to `docs/screenshots/`.
 
-## 3-minute demo steps
+## 3-minute demo
 
-Full script: [docs/demo-script.md](demo-script.md)
-
-In-app guide: `/demo` on the live site (or `http://localhost:3000/demo` locally)
-
-1. Explain problem (20s)
-2. Connect wallet
-3. Create escrow-backed payment request
-4. Pay into escrow with MockQIEUSD
-5. Release escrow (mark completed)
-6. Leave review (hash on-chain)
-7. Show profile + QIE Pass badge
-8. QIE ecosystem page
-9. Roadmap / tests / CI
+- **In-app walkthrough:** `/demo` (or `http://localhost:3000/demo`)
+- **Read-aloud script:** [docs/demo-script.md](demo-script.md)
+- **Judging criteria:** [docs/judging.md](judging.md)
 
 ## Known limitations
 
@@ -70,13 +71,12 @@ In-app guide: `/demo` on the live site (or `http://localhost:3000/demo` locally)
 - QIE Pass is demo mock (localStorage), not real API
 - Refund delay: 60s local, 24h testnet
 - Reputation score computed client-side for demo clarity
-- Testnet contracts not deployed until you run deploy script
 
 ## Backup demo mode
 
-If contracts or Supabase are not configured:
+This app can be demoed without deployed contracts or Supabase using built-in demo data.
 
-1. Open app — **Demo mode** banner appears
+1. Open app — **Demo mode** banner appears when env is missing
 2. All pages work with [frontend/lib/demoData.ts](../frontend/lib/demoData.ts)
 3. Escrow flow works in UI (mock state transitions)
 4. Demo profiles: Maya Chen, Dr. Alex Rivera, ShopWave Store
@@ -89,5 +89,3 @@ No wallet required to browse; connect wallet for full flow.
 npm install && npm run compile && npm test    # 24 tests pass
 cd frontend && npm install --legacy-peer-deps && npm run build
 ```
-
-CI: https://github.com/dorakingx/qie-reputation-pay/actions
