@@ -21,7 +21,7 @@
 | Field | Value |
 |-------|-------|
 | **Live demo URL** | https://qie-reputation-pay.vercel.app |
-| **Demo video URL** | Pending before final submission |
+| **Demo video URL** | https://youtu.be/QzmI2ygGo9U |
 | **GitHub repo URL** | https://github.com/dorakingx/qie-reputation-pay |
 | **MockQIEUSD address (QIE testnet)** | `0xeD16CBCfb5Fa00A363963A49445e08290Ed8d5B0` |
 | **ReputationPay address (QIE testnet)** | `0x1273BF4bda6aD31BBA25eA7ee10013FaAf591Aa1` |
