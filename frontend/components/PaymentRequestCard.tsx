@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { PaymentRequest } from "@/types";
 import { StatusBadge } from "./StatusBadge";
+import { EscrowBadge } from "./EscrowBadge";
 import { formatAmount, truncateAddress } from "@/lib/utils";
 import { Copy, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
@@ -35,7 +36,10 @@ export function PaymentRequestCard({
           </p>
           <h3 className="font-semibold text-slate-900">{request.title}</h3>
         </div>
-        <StatusBadge status={request.status} />
+        <div className="flex flex-col items-end gap-1">
+          <StatusBadge status={request.status} />
+          <EscrowBadge status={request.status} />
+        </div>
       </div>
       <p className="mb-4 line-clamp-2 text-sm text-slate-600">
         {request.description}

@@ -6,7 +6,7 @@ import { TrustBadge } from "@/components/TrustBadge";
 import { ReputationBar } from "@/components/ReputationBar";
 import { TrustExplanation } from "@/components/TrustExplanation";
 import { ReviewCard } from "@/components/ReviewCard";
-import { QiePassBadge } from "@/components/QiePassBadge";
+import { QiePassVerifyButton } from "@/components/QiePassVerifyButton";
 import { OnChainVerifiedBadge } from "@/components/OnChainVerifiedBadge";
 import { CopyProfileLink } from "@/components/CopyProfileLink";
 import {
@@ -102,8 +102,12 @@ export default function ProfilePage({
               {truncateAddress(address, 6)}
               <Copy className="h-3.5 w-3.5" />
             </button>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <QiePassBadge verified={passVerified} />
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <QiePassVerifyButton
+                verified={passVerified}
+                isOwnProfile={isOwnProfile}
+                onVerify={handleVerifyPass}
+              />
               <OnChainVerifiedBadge />
             </div>
           </div>
@@ -113,22 +117,15 @@ export default function ProfilePage({
           </div>
         </div>
 
-        {isOwnProfile && !passVerified && (
+        {!passVerified && (
           <div className="mb-6 rounded-lg border border-indigo-200 bg-indigo-50 p-4">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="font-medium text-indigo-900">Verify with QIE Pass</p>
-                <p className="text-sm text-indigo-700">
-                  Demo: link your identity to reduce Sybil attacks and duplicate reputation farming.
-                </p>
-              </div>
-              <button
-                onClick={handleVerifyPass}
-                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
-              >
-                Verify with QIE Pass
-              </button>
-            </div>
+            <p className="font-medium text-indigo-900">QIE Pass identity</p>
+            <p className="mt-1 text-sm text-indigo-700">
+              QIE Pass helps prevent Sybil attacks and duplicate reputation farming.
+              {isOwnProfile
+                ? " Verify your profile to link a trusted identity to this wallet."
+                : " This profile has not verified with QIE Pass yet."}
+            </p>
           </div>
         )}
 
@@ -165,9 +162,9 @@ export default function ProfilePage({
             <div>
               <p className="font-medium text-slate-900">QIE Pass & Sybil resistance</p>
               <p className="mt-1 text-sm text-slate-600">
-                QIE Pass ties a verified identity to this wallet so reputation cannot be
-                easily farmed with duplicate accounts. Production will integrate the official
-                QIE Pass API; this demo uses mock verification for hackathon judging.
+                QIE Pass helps prevent Sybil attacks and duplicate reputation farming.
+                Production will integrate the official QIE Pass API; this demo uses mock
+                verification for hackathon judging.
               </p>
             </div>
           </div>

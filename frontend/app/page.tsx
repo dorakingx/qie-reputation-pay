@@ -30,22 +30,33 @@ export default function LandingPage() {
       </header>
 
       <section className="mx-auto max-w-6xl px-4 py-16 text-center md:py-24">
-        <p className="mb-4 inline-block rounded-full bg-teal-50 px-4 py-1 text-sm font-medium text-teal-700">
+        <p className="mb-2 inline-block rounded-full bg-teal-50 px-4 py-1 text-sm font-medium text-teal-700">
           QIE Ecosystem · Hackathon 2026
         </p>
+        <p className="mx-auto mb-4 max-w-2xl text-sm text-slate-500">
+          Built on QIE Testnet with wallet login, escrow contracts, review hashes, and QIE Pass demo verification.
+        </p>
         <h1 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 md:text-5xl">
-          Escrow-backed stablecoin payments + portable QIE reputation for freelancers and merchants.
+          Escrow-backed QIEUSD payments + portable reputation for freelancers and merchants.
         </h1>
         <p className="mx-auto mb-8 max-w-2xl text-lg text-slate-600">
           Pay safely with QIEUSD held in escrow until work is done. Build verifiable trust that travels with your wallet across the QIE ecosystem.
         </p>
-        <Link
-          href="/app/dashboard"
-          className="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-teal-600/25 hover:bg-teal-700"
-        >
-          Launch App
-          <ArrowRight className="h-5 w-5" />
-        </Link>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <Link
+            href="/app/dashboard"
+            className="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-teal-600/25 hover:bg-teal-700"
+          >
+            Launch App
+            <ArrowRight className="h-5 w-5" />
+          </Link>
+          <Link
+            href="/demo"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-8 py-4 text-lg font-semibold text-slate-700 hover:bg-slate-50"
+          >
+            Judge Demo
+          </Link>
+        </div>
       </section>
 
       <section className="border-t border-slate-200 bg-white py-14">
