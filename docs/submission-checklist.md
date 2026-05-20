@@ -2,6 +2,16 @@
 
 Use this checklist before final judging.
 
+## If you only have 3 minutes
+
+1. Open the live demo or `/demo`
+2. View the escrow-backed payment flow
+3. Open `/app/request/demo`
+4. See QIEUSD held in escrow
+5. Open `/app/profile/demo`
+6. See QIE Pass demo verification and portable reputation
+7. Check [docs/judging.md](judging.md) for criteria mapping
+
 ## Final submission
 
 | Field | Value |
@@ -11,14 +21,18 @@ Use this checklist before final judging.
 | **GitHub repo URL** | https://github.com/dorakingx/qie-reputation-pay |
 | **MockQIEUSD address (QIE testnet)** | Pending before final submission |
 | **ReputationPay address (QIE testnet)** | Pending before final submission |
-| **QIE explorer links** | Pending before final submission — template: `https://testnet.qie.digital/address/{address}` |
+| **MockQIEUSD explorer link** | Pending before final submission |
+| **ReputationPay explorer link** | Pending before final submission |
 | **CI status** | Passing on main — [GitHub Actions](https://github.com/dorakingx/qie-reputation-pay/actions) |
 | **Test status** | 24 passing — `npm test` ([`test/ReputationPay.ts`](../test/ReputationPay.ts)) |
-| **Screenshot status** | Pending before final submission — 8 files in [docs/screenshots/](screenshots/README.md) |
+| **Screenshot status** | Pending before final submission |
+| **Backup demo mode** | Available — `/demo`, `/app/request/demo`, `/app/profile/demo` |
 
-After deploy, replace **Pending before final submission** with real URLs and addresses. Do not add fake values.
+After deploy, explorer links use: `https://testnet.qie.digital/address/{address}`
 
-> **The project is fully demoable in local/demo mode even before testnet deployment.** Run `npm run dev`, open `/demo`, or visit `/app/request/demo` and `/app/profile/demo` without wallet, Supabase, or contract environment variables.
+Replace **Pending before final submission** with real values only when complete. Do not add fake URLs or addresses.
+
+> **The project is fully demoable in local/demo mode even before testnet deployment.** Run `npm run dev` and open the backup demo routes above without wallet, Supabase, or contract environment variables.
 
 ---
 
@@ -26,12 +40,12 @@ After deploy, replace **Pending before final submission** with real URLs and add
 
 ### 1. Create root `.env`
 
-Copy from [`.env.example`](../.env.example):
-
 ```bash
 PRIVATE_KEY=
 QIE_TESTNET_RPC=https://rpc1testnet.qie.digital/
 ```
+
+Copy from [`.env.example`](../.env.example).
 
 ### 2. Deploy contracts
 
@@ -39,15 +53,9 @@ QIE_TESTNET_RPC=https://rpc1testnet.qie.digital/
 npm run deploy:testnet
 ```
 
-Writes `frontend/.env.local` and [docs/deployed-addresses.md](deployed-addresses.md).
+### 3. Copy addresses and explorer links
 
-### 3. Copy contract addresses
-
-Update:
-
-- [README.md](../README.md) — Final submission table
-- This file — Final submission table
-- Vercel environment variables (step 5)
+Update README Final submission table and this checklist.
 
 ### 4. Deploy frontend
 
@@ -56,7 +64,7 @@ cd frontend
 vercel
 ```
 
-### 5. Add Vercel environment variables
+### 5. Vercel environment variables
 
 ```
 NEXT_PUBLIC_CHAIN_ID=1983
@@ -67,7 +75,19 @@ NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
 
-See [frontend/.env.example](../frontend/.env.example).
+---
+
+## Final steps before submission
+
+- [ ] Deploy contracts to QIE testnet (see above)
+- [ ] Paste contract addresses and explorer links into Final submission table
+- [ ] Deploy frontend to Vercel
+- [ ] Add Vercel URL to Live demo URL row
+- [ ] Record 2–3 minute demo video ([docs/demo-script.md](demo-script.md))
+- [ ] Capture screenshots and run `npm run docs:screenshots`
+- [ ] Run `npm test`
+- [ ] Run `cd frontend && npm run build`
+- [ ] Confirm `/demo`, `/app/request/demo`, `/app/profile/demo` work without wallet
 
 ---
 
@@ -76,36 +96,54 @@ See [frontend/.env.example](../frontend/.env.example).
 | Page | URL |
 |------|-----|
 | Walkthrough | `/demo` |
-| Escrow request (demo) | `/app/request/demo` → request #2 (Escrowed) |
-| QIE Pass profile (demo) | `/app/profile/demo` → Maya Chen |
+| Escrow demo landing | `/app/request/demo` → request #2 (Escrowed) |
+| Profile demo landing | `/app/profile/demo` → Maya Chen (QIE Pass verified) |
 | Dashboard | `/app/dashboard` |
+
+---
+
+## Verification before submit
+
+### Automated
+
+```bash
+npm install
+npm run compile
+npm test
+cd frontend
+npm install --legacy-peer-deps
+npm run build
+```
+
+### Manual
+
+- [ ] Landing page loads
+- [ ] `/demo` loads
+- [ ] `/app/request/demo` loads (landing + link to escrow)
+- [ ] `/app/profile/demo` loads (landing + link to profile)
+- [ ] `/app/dashboard` loads
+- [ ] README links work
+- [ ] Screenshots present if available (`npm run docs:screenshots`)
+- [ ] Final submission table filled (no Pending where complete)
+
+---
 
 ## Screenshots
 
-Capture 8 screenshots per [docs/screenshots/README.md](screenshots/README.md), then run:
+**Screenshot status:** Pending before final submission
+
+Screenshots are optional for local review, but recommended for final judging. Demo routes can be captured without wallet or testnet deployment. See [docs/screenshots/README.md](screenshots/README.md).
 
 ```bash
 npm run docs:screenshots
 ```
 
-## 3-minute demo
+---
 
-- **In-app walkthrough:** `/demo`
-- **Read-aloud script:** [docs/demo-script.md](demo-script.md)
-- **Judging criteria:** [docs/judging.md](judging.md)
+## What you still need to do manually
 
-## Backup demo mode
-
-This app can be demoed without deployed contracts or Supabase using built-in demo data.
-
-1. Demo mode banner when contract env is missing
-2. All pages use [frontend/lib/demoData.ts](../frontend/lib/demoData.ts)
-3. Escrow UI works with mock state transitions
-4. Demo profiles: Maya Chen, Dr. Alex Rivera, ShopWave Store
-
-## Verification before submit
-
-```bash
-npm install && npm run compile && npm test
-cd frontend && npm install --legacy-peer-deps && npm run build
-```
+1. Deploy to QIE testnet (`npm run deploy:testnet`)
+2. Deploy frontend to Vercel (`cd frontend && vercel`)
+3. Record demo video (2–3 min, [docs/demo-script.md](demo-script.md))
+4. Add screenshots to `docs/screenshots/` and run `npm run docs:screenshots`
+5. Fill Final submission table (replace all Pending rows)

@@ -6,6 +6,16 @@
 
 [![CI](https://github.com/dorakingx/qie-reputation-pay/actions/workflows/ci.yml/badge.svg)](https://github.com/dorakingx/qie-reputation-pay/actions/workflows/ci.yml)
 
+## If you only have 3 minutes
+
+1. Open the live demo or [`/demo`](http://localhost:3000/demo)
+2. View the escrow-backed payment flow
+3. Open [`/app/request/demo`](http://localhost:3000/app/request/demo)
+4. See QIEUSD held in escrow
+5. Open [`/app/profile/demo`](http://localhost:3000/app/profile/demo)
+6. See QIE Pass demo verification and portable reputation
+7. Check [docs/judging.md](docs/judging.md) for criteria mapping
+
 ## Final submission
 
 | Field | Value |
@@ -15,14 +25,18 @@
 | **GitHub repo URL** | https://github.com/dorakingx/qie-reputation-pay |
 | **MockQIEUSD address (QIE testnet)** | Pending before final submission |
 | **ReputationPay address (QIE testnet)** | Pending before final submission |
-| **QIE explorer links** | Pending before final submission |
+| **MockQIEUSD explorer link** | Pending before final submission |
+| **ReputationPay explorer link** | Pending before final submission |
 | **CI status** | Passing on main |
 | **Test status** | 24 passing — `npm test` ([`test/ReputationPay.ts`](test/ReputationPay.ts)) |
 | **Screenshot status** | Pending before final submission |
+| **Backup demo mode** | Available — `/demo`, `/app/request/demo`, `/app/profile/demo` |
 
-Full checklist: [docs/submission-checklist.md](docs/submission-checklist.md)
+After deploy, explorer links use: `https://testnet.qie.digital/address/{address}`
 
-> **The project is fully demoable in local/demo mode even before testnet deployment.** Run `npm run dev`, visit [`/demo`](http://localhost:3000/demo), or open [`/app/request/demo`](http://localhost:3000/app/request/demo) and [`/app/profile/demo`](http://localhost:3000/app/profile/demo) without wallet, Supabase, or contract environment variables.
+Full checklist: [docs/submission-checklist.md](docs/submission-checklist.md) — includes [what you still need to do manually](docs/submission-checklist.md#what-you-still-need-to-do-manually).
+
+> **The project is fully demoable in local/demo mode even before testnet deployment.** Run `npm run dev` and use the backup demo routes above without wallet, Supabase, or contract environment variables.
 
 ## Feature status (honest overview)
 
@@ -62,14 +76,18 @@ Full checklist: [docs/submission-checklist.md](docs/submission-checklist.md)
 
 ## Why QIE?
 
-QIE Reputation Pay is built for the **QIE identity and payment ecosystem**. QIE Wallet handles payment authorization, QIEUSD/QUSDC enables stable payments, QIE Pass provides Sybil-resistant identity, and the reputation profile becomes a **portable trust layer across QIE apps**.
+QIE is not just the settlement layer. In this project, **QIE becomes the trust layer**.
 
-- **EVM-compatible** — Solidity escrow and reputation contracts deploy directly on QIE
-- **Low-fee environment** — practical for small freelance and creator payments
-- **QIE Pass** — can reduce fake accounts and reputation farming
-- **QIE Wallet** — simple entry point for users
-- **QIE DEX (future)** — auto-convert received QIEUSD/QUSDC
-- **QIE Oracle (future)** — risk-based credit limits
+QIE Reputation Pay is built for the QIE identity and payment ecosystem:
+
+- **QIE Wallet** signs payments
+- **QIEUSD / QUSDC** settles work (MockQIEUSD demo today; QUSDC path in production)
+- **QIE Pass** reduces Sybil reputation farming (demo mock until real API)
+- **QIE Testnet** verifies escrow and review events when deployed
+- **QIE DEX (future)** can convert incoming payments
+- **QIE Oracle (future)** can support credit limits
+
+Also: EVM-compatible Solidity contracts, low fees for freelance-sized payments, and portable reputation across QIE apps.
 
 ## Why this can win
 
@@ -117,9 +135,9 @@ npm run deploy:testnet
 
 Writes `frontend/.env.local` and [docs/deployed-addresses.md](docs/deployed-addresses.md).
 
-### 3. Copy contract addresses
+### 3. Copy contract addresses and explorer links
 
-Update this README Final submission table, [docs/submission-checklist.md](docs/submission-checklist.md), and Vercel env (step 5).
+Update the Final submission table in this README and [docs/submission-checklist.md](docs/submission-checklist.md), then set Vercel env (step 5).
 
 ### 4. Deploy frontend
 
@@ -138,6 +156,18 @@ NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
+
+## Final steps before submission
+
+- Deploy contracts to QIE testnet (commands above)
+- Paste contract addresses and explorer links into the Final submission table
+- Deploy frontend to Vercel and set Live demo URL
+- Record a 2–3 minute demo video — [docs/demo-script.md](docs/demo-script.md)
+- Capture screenshots and run `npm run docs:screenshots`
+- Run `npm test` and `cd frontend && npm run build`
+- Confirm [`/demo`](http://localhost:3000/demo), [`/app/request/demo`](http://localhost:3000/app/request/demo), and [`/app/profile/demo`](http://localhost:3000/app/profile/demo) work **without wallet**
+
+See [docs/submission-checklist.md](docs/submission-checklist.md) for the full manual checklist.
 
 ## How to run locally
 
@@ -177,9 +207,11 @@ npm run dev           # http://localhost:3000
 
 ## Screenshots
 
-**Status:** Pending before final submission — [capture guide](docs/screenshots/README.md)
+**Screenshot status:** Pending before final submission
 
-After adding PNGs to `docs/screenshots/`, run:
+Screenshots are optional for local review, but **recommended for final judging**. The app includes demo routes that can be captured without wallet or testnet deployment. Capture guide: [docs/screenshots/README.md](docs/screenshots/README.md)
+
+After adding PNGs to `docs/screenshots/`:
 
 ```bash
 npm run docs:screenshots
@@ -197,7 +229,7 @@ npm run docs:screenshots
 | QIE ecosystem | `docs/screenshots/08-qie-ecosystem.png` |
 
 <!-- SCREENSHOTS_START -->
-_No screenshot files in docs/screenshots/ yet. Run this script after adding PNGs._
+_No screenshot files in docs/screenshots/ yet. Run `npm run docs:screenshots` after adding PNGs._
 <!-- SCREENSHOTS_END -->
 
 ## Security notes
@@ -211,8 +243,8 @@ _No screenshot files in docs/screenshots/ yet. Run this script after adding PNGs
 
 - MockQIEUSD is not production QUSDC
 - QIE Pass is demo/mock until real API exists
-- QIE testnet addresses are **ready to deploy** — not filled until you run deploy
-- Live demo URL is **pending** until Vercel is deployed
+- QIE testnet deployment is **ready to deploy** — addresses not filled until you run deploy
+- Live demo URL and demo video are **pending** until you deploy and record
 - Reputation score computed client-side for demo clarity
 
 ## Future roadmap

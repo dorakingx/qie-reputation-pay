@@ -93,19 +93,20 @@ export default function LandingPage() {
       <section className="py-14">
         <div className="mx-auto max-w-3xl px-4 text-center">
           <h2 className="mb-4 text-2xl font-bold">Why QIE?</h2>
-          <p className="text-slate-600">
-            QIE Reputation Pay is built for the QIE identity and payment ecosystem. QIE Wallet
-            handles payment authorization, QIEUSD/QUSDC enables stable payments, QIE Pass provides
-            Sybil-resistant identity, and the reputation profile becomes a portable trust layer
-            across QIE apps.
+          <p className="text-lg font-medium text-slate-800">
+            QIE is not just the settlement layer. In this project, QIE becomes the trust layer.
+          </p>
+          <p className="mt-3 text-slate-600">
+            QIE Reputation Pay is built for the QIE identity and payment ecosystem — portable
+            reputation across apps, not one-off transfers.
           </p>
           <ul className="mt-6 space-y-2 text-left text-sm text-slate-600 md:mx-auto md:max-w-lg">
-            <li>• EVM-compatible — Solidity escrow runs directly on QIE</li>
-            <li>• Low fees — practical for freelance and creator payments</li>
-            <li>• QIE Pass — reduces fake accounts and reputation farming</li>
-            <li>• QIE Wallet — simple onboarding</li>
-            <li>• QIE DEX (future) — auto-convert received stablecoins</li>
-            <li>• QIE Oracle (future) — risk-based credit limits</li>
+            <li>• QIE Wallet signs payments</li>
+            <li>• QIEUSD / QUSDC settles work</li>
+            <li>• QIE Pass reduces Sybil reputation farming</li>
+            <li>• QIE Testnet verifies escrow and review events</li>
+            <li>• QIE DEX (future) can convert incoming payments</li>
+            <li>• QIE Oracle (future) can support credit limits</li>
           </ul>
         </div>
       </section>

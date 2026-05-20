@@ -58,7 +58,7 @@ Judges can evaluate immediately via `/demo`, `/app/request/demo`, and `/app/prof
 
 **Why we are strong**
 
-QIE Reputation Pay is built for the **QIE identity and payment ecosystem**. QIE Wallet handles payment authorization, QIEUSD/QUSDC enables stable payments, QIE Pass provides Sybil-resistant identity, and the reputation profile becomes a **portable trust layer across QIE apps**.
+QIE is not just the settlement layer. In this project, **QIE becomes the trust layer**. QIE Wallet signs payments, QIEUSD/QUSDC settles work, QIE Pass reduces Sybil farming, QIE Testnet verifies escrow and reviews when deployed, and reputation profiles compose across QIE apps.
 
 | Component | Status | Role |
 |-----------|--------|------|

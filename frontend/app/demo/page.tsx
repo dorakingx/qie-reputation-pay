@@ -7,6 +7,7 @@ import {
   PlusCircle,
   UserCircle,
 } from "lucide-react";
+import { JudgeDemoBanner } from "@/components/JudgeDemoBanner";
 
 const GITHUB_REPO = "https://github.com/dorakingx/qie-reputation-pay";
 
@@ -79,6 +80,7 @@ export default function DemoPage() {
       </header>
 
       <main className="mx-auto max-w-3xl px-4 py-10">
+        <JudgeDemoBanner />
         <div className="mb-8 text-center">
           <p className="mb-2 inline-flex items-center gap-1 rounded-full bg-teal-50 px-3 py-1 text-sm font-medium text-teal-700">
             <Clock className="h-4 w-4" />
