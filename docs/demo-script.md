@@ -1,71 +1,74 @@
 # 3-Minute Hackathon Demo Script (read aloud)
 
-**Total time: ~3:00** · In-app guide: `/demo` · Full checklist: [submission-checklist.md](submission-checklist.md)
+**Total: ~3:00** · In-app guide: `/demo` · Judge shortcuts: `/app/request/demo`, `/app/profile/demo`
 
 ---
 
 ## 0:00–0:20 — Problem
 
-"Web3 payments move money, but they do not prove trust. Freelancers and merchants rebuild reputation on every platform. There is no portable way to know if someone you have never met is reliable."
+"Web3 payments move money, but they do not prove trust. Freelancers and merchants rebuild reputation on every platform. When you pay someone you have never met, you are taking a risk — and that risk rarely travels with your wallet."
 
 ---
 
 ## 0:20–0:40 — Solution
 
-"QIE Reputation Pay adds escrow, verified completion, and portable reputation so freelancers and merchants can safely transact with people they have never met. It is built for the QIE identity and payment ecosystem — wallet login, stablecoin escrow, QIE Pass demo verification, and public trust profiles."
+"QIE Reputation Pay adds escrow, verified completion, and portable reputation so freelancers and merchants can safely transact with people they have never met. You get payment safety and a public trust profile in one product."
 
 ---
 
-## 0:40–1:10 — Create payment request
+## 0:40–1:05 — QIE integration
 
-- Open the app → **Launch App**
-- **Connect Wallet** (QIE Testnet 1983 or Hardhat local 31337)
-- Go to **Create**
-- Example: title "Logo design sprint", 100 QIEUSD, recipient = second demo wallet
+"QIE Reputation Pay is built for the QIE identity and payment ecosystem. QIE Wallet handles authorization, QIEUSD and the path to QUSDC enable stable payments, QIE Pass demo verification reduces Sybil farming, and reputation becomes portable across QIE apps. This is not a generic escrow dApp — it is designed for QIE."
+
+---
+
+## 1:05–1:30 — Create escrow-backed payment request
+
+- **Launch App** → **Connect Wallet** (QIE Testnet 1983 or local 31337)
+- **Create** → title, amount, recipient
 - Submit and **copy the payment link**
 
----
-
-## 1:10–1:40 — Pay into escrow
-
-- Switch to the **payer** wallet
-- Open the payment link → **Pay into Escrow (QIEUSD)**
-- Point out: funds are **held in the contract**, not sent directly to the recipient
-- Show escrow badge: **Escrow-backed**
+Or open **`/app/request/demo`** to show a pre-filled escrow example.
 
 ---
 
-## 1:40–2:00 — Release payment
+## 1:30–1:55 — Pay into escrow
 
-- Switch to the **recipient** wallet
-- Click **Release Escrow & Complete**
-- Recipient receives QIEUSD only after marking work done
-
----
-
-## 2:00–2:20 — Leave review
-
-- Switch back to the **payer**
-- Submit a 5-star review with short text
-- Note: **rating + reviewHash on-chain**; full text can live off-chain
+- Payer opens the link → **Pay into Escrow (QIEUSD)**
+- Funds stay **in the contract** until release — not a direct transfer
+- Show **Escrow-backed** badge
 
 ---
 
-## 2:20–2:40 — Reputation profile + QIE Pass
+## 1:55–2:15 — Release payment after completion
 
-- Open the recipient **profile**
-- Show reputation score, trust badge, completed payments
-- Highlight **QIE Pass Verified** on a demo profile
-- On your own profile: **Verify with QIE Pass** (demo mock)
+- Recipient → **Release Escrow & Complete**
+- QIEUSD moves to recipient only after work is marked done
 
 ---
 
-## 2:40–3:00 — Why QIE and future roadmap
+## 2:15–2:35 — Leave review and update reputation
 
-"QIE Reputation Pay is built for the QIE ecosystem. QIE Wallet handles authorization, QIEUSD and QUSDC enable stable payments, QIE Pass reduces Sybil farming, and reputation becomes portable across QIE apps. Next: real QUSDC, QIE Pass API, QIE DEX auto-convert, and QIE Oracle risk scores. Twenty-four contract tests and CI are on GitHub."
+- Payer submits rating + review text
+- **Rating and reviewHash on-chain**; full text can live off-chain
+- Reputation stats update on the recipient profile
+
+---
+
+## 2:35–2:50 — Show QIE Pass verified profile
+
+- Open **`/app/profile/demo`** (Maya Chen) or recipient profile
+- Reputation score, trust badge, **QIE Pass Verified**
+- Explain Sybil resistance (demo mock today; real API in production)
+
+---
+
+## 2:50–3:00 — Closing: why this matters
+
+"QIE Reputation Pay can win because it combines escrow-backed QIEUSD, verified completion, on-chain review hashes, portable wallet reputation, and QIE Pass demo identity — with a clear path to QUSDC, QIE DEX, and QIE Oracle. Twenty-four contract tests and CI prove the engineering. Judges can try everything in demo mode at `/demo` without deploying to testnet first."
 
 ---
 
 ## Backup demo mode
 
-This app can be demoed without deployed contracts or Supabase using built-in demo data. If contract addresses are not configured, a demo mode banner appears and all pages work with sample requests and profiles.
+This app can be demoed without deployed contracts or Supabase using built-in demo data. If env vars are missing, a demo banner appears and all flows work with sample data.

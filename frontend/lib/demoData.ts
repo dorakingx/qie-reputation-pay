@@ -8,6 +8,12 @@ export const DEMO_USERS = {
   carol: "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
 } as const;
 
+/** Judge-friendly stable URLs (see app/app/request|profile/demo pages) */
+export const DEMO_REQUEST_PATH = "/app/request/demo";
+export const DEMO_REQUEST_TARGET_ID = "2";
+export const DEMO_PROFILE_PATH = "/app/profile/demo";
+export const DEMO_PROFILE_ADDRESS = DEMO_USERS.alice;
+
 function buildProfile(
   address: string,
   displayName: string,
@@ -196,7 +202,8 @@ export function getProfileByAddress(address: string): UserProfile | undefined {
 }
 
 export function getRequestById(id: string): PaymentRequest | undefined {
-  return demoPaymentRequests.find((r) => r.id === id);
+  const resolvedId = id === "demo" ? DEMO_REQUEST_TARGET_ID : id;
+  return demoPaymentRequests.find((r) => r.id === resolvedId);
 }
 
 export function getReviewsForUser(address: string): Review[] {
